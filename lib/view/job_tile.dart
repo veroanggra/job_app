@@ -16,7 +16,7 @@ class JobTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>  detailScreen()) );
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>  DetailScreen()) );
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

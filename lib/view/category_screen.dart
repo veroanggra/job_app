@@ -73,6 +73,31 @@ class CategoryPage extends StatelessWidget {
                 ],
               ),
             ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'New Startup',
+                    style: blackTextStyle.copyWith(fontSize: 16.0),
+                  ),
+                  SizedBox(height: 24.0),
+                  JobTile(
+                      companyName: 'Google',
+                      jobPosition: 'Front-End Developer',
+                      companyImage: 'assets/images/icon_google.png'),
+                  JobTile(
+                      companyName: 'Instagram',
+                      jobPosition: 'UI Designer',
+                      companyImage: 'assets/images/icon_instagram.png'),
+                  JobTile(
+                      companyName: 'Facebook',
+                      jobPosition: 'Data Scientist',
+                      companyImage: 'assets/images/icon_facebook.png'),
+                ],
+              ),
+            )
           ],
         ),
       ),
