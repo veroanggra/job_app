@@ -30,19 +30,21 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  // Future<UserModel> login(String email, String password) async {
-  //   try {
-  //     var body = {'email': email, 'password': password};
-  //     var response = await http
-  //         .post(Uri.parse('https://bwa-jobs.herokuapp.com/login'), body: body);
-  //     print(response.body);
-  //     print(response.statusCode);
-  //     if (response.statusCode == 200) {
-  //       return UserModel.fromJson(jsonDecode(response.body));
-  //     } else {
-  //       var status = 'Failed';
-  //       return login(status, status);
-  //     }
-  //   } catch (e) {}
-  // }
+  Future<UserModel> login(String email, String password) async {
+    try {
+      var body = {'email': email, 'password': password};
+      var response = await http
+          .post(Uri.parse('https://bwa-jobs.herokuapp.com/login'), body: body);
+      print(response.body);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        return UserModel.fromJson(jsonDecode(response.body));
+      } else {
+        var status = 'Failed';
+        return login(status, status);
+      }
+    } catch (e) {
+      return login(e.toString(), e.toString());
+    }
+  }
 }
