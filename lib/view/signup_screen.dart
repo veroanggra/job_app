@@ -1,6 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:job_app/model/user_model.dart';
+import 'package:job_app/providers/auth/auth_provider.dart';
+import 'package:job_app/providers/user/user_provider.dart';
 import 'package:job_app/theme.dart';
+import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -15,8 +19,17 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController passwordController = TextEditingController(text: '');
   TextEditingController goalController = TextEditingController(text: '');
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
+    void showError(String message) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(backgroundColor: Colors.red, content: Text(message)));
+    }
+
+    var authProvider = Provider.of<AuthProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -184,23 +197,48 @@ class _SignupScreenState extends State<SignupScreen> {
                 Container(
                   width: double.infinity,
                   height: 45.0,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/home', (route) => false);
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(65.0),
-                      ),
-                    ),
-                    child: Text(
-                      'Sign Up',
-                      style:
-                          whiteTextStyle.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                  ),
+                  child: isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : TextButton(
+                          onPressed: () async {
+                            if (nameController.text.isEmpty ||
+                                emailController.text.isEmpty ||
+                                passwordController.text.isEmpty ||
+                                goalController.text.isEmpty) {
+                              showError('Data tidak boleh kosong');
+                            } else {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              UserModel user = await authProvider.register(
+                                  emailController.text,
+                                  passwordController.text,
+                                  nameController.text,
+                                  goalController.text);
+                              setState(() {
+                                isLoading = false;
+                              });
+                              if (user == null) {
+                                showError('Data Salah');
+                              } else {
+                                userProvider.user = user;
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/home', (route) => false);
+                              }
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(65.0),
+                            ),
+                          ),
+                          child: Text(
+                            'Sign Up',
+                            style: whiteTextStyle.copyWith(
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
                 ),
                 SizedBox(
                   height: 20,

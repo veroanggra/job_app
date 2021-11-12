@@ -32,6 +32,10 @@ dependencies:
   email_validator: ^2.0.1
   notifications: ^2.0.1
   fancy_bottom_navigation: ^0.3.2
+  http: ^0.13.4
+  provider: ^6.0.1
+
+
 
 
 
